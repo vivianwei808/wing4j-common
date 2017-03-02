@@ -98,6 +98,23 @@ public final class DynamicFile {
     }
 
     /**
+     * 检查文件是否存在
+     * @return 存在返回真
+     * @throws IOException 异常
+     */
+    public boolean exists() throws IOException {
+        File dir = new File(pathName, fileName);
+        if (!dir.exists()) {
+            return false;
+        }
+        File real = getRealFile(false);
+        if (real == null) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 创建文件目录
      */
     public void mkdirs() {
@@ -146,7 +163,7 @@ public final class DynamicFile {
     public void rollback() throws IOException {
         File dir = new File(pathName, fileName);
         if (!dir.exists()) {
-            throw new FileNotFoundException();
+            throw new FileNotFoundException(MessageFormatter.format("not exists dir '{}'", dir));
         }
         File file = new File(dir, fileName + "." + "0");
         if (!file.exists()) {
@@ -176,6 +193,11 @@ public final class DynamicFile {
         while (lateFile.exists()) {
             //小于
             if (System.currentTimeMillis() - beginTime < 10 * 1000) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    //DO NOTHING
+                }
                 lateFile = new File(dir, fileName + "." + DateUtils.toString(new Date(), DateStyle.FILE_FORMAT2));
             } else {
                 throw new TimeoutException(MessageFormatter.format("commit temp file '{}' happens timeout", tempFile));
@@ -204,9 +226,11 @@ public final class DynamicFile {
         file.createNewFile();
         return file;
     }
+
     public File getRealFile() throws IOException {
         return getRealFile(true);
     }
+
     /**
      * 获取实际文件
      *
@@ -216,10 +240,18 @@ public final class DynamicFile {
     File getRealFile(boolean throwExp) throws IOException {
         File dir = new File(pathName, fileName);
         if (!dir.exists()) {
-            throw new NotDirectoryException(MessageFormatter.format("not exists dir '{}'", dir));
+            if (throwExp) {
+                throw new NotDirectoryException(MessageFormatter.format("not exists dir '{}'", dir));
+            } else {
+                return null;
+            }
         }
         if (dir.isFile()) {
-            throw new NotSuchFieldException(MessageFormatter.format("not exists dir '{}'", dir));
+            if (throwExp) {
+                throw new NotSuchFieldException(MessageFormatter.format("not exists dir '{}'", dir));
+            } else {
+                return null;
+            }
         }
         File[] files = dir.listFiles(new FilenameFilter() {
             @Override
