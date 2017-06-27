@@ -18,6 +18,10 @@
 --@timeout=1000
 --Óï¾ä×¢ÊÍ
 --@comment=±¸×¢
+--@resultMapping={
+    SERIAL_NO:serialNo,
+    NAME:name1
+}
 ```
 ```sql
 select * 
