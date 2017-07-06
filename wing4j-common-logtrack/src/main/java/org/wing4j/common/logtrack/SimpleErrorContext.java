@@ -108,6 +108,11 @@ public class SimpleErrorContext implements ErrorContext {
     }
 
     @Override
+    public void throwError() {
+        throw new LogtrackRuntimeException(this);
+    }
+
+    @Override
     public String getCode() {
         return code;
     }

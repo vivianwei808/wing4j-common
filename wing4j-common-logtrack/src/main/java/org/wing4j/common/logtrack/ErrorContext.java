@@ -1,7 +1,7 @@
 package org.wing4j.common.logtrack;
 
 /**
- * Created by woate on 2017/1/6.
+ * Created by wing4j on 2017/1/6.
  */
 public interface ErrorContext extends Error {
     String LINE_SEPARATOR = System.getProperty("line.separator", "\n");
@@ -21,4 +21,6 @@ public interface ErrorContext extends Error {
     ErrorContext cause(Throwable cause);
 
     ErrorContext reset();
+
+    void throwError();
 }

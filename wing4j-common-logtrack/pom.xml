@@ -6,15 +6,19 @@
     <parent>
         <groupId>org.wing4j.common</groupId>
         <artifactId>wing4j-common</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
-
     <artifactId>wing4j-common-logtrack</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.wing4j.common</groupId>
+            <artifactId>wing4j-common-interfaces</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wing4j.common</groupId>
             <artifactId>wing4j-common-utils</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 
